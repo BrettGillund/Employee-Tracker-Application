@@ -1,7 +1,6 @@
 {
   "name": "employee-tracker-app",
   "version": "1.0.0",
-  "description": "",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -11,11 +10,21 @@
   "license": "ISC",
   "dependencies": {
     "env": "^0.0.2",
-    "inquirer": "^9.0.2",
-    "mysql2": "^2.3.3"
+    "inquirer": "^8.2.4",
+    "mysql2": "^2.3.3",
+    "node": "^8.17.0"
   },
   "devDependencies": {
     "chai": "^4.3.6",
     "mocha": "^10.0.0"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/BrettGillund/Employee-Tracker-Application.git"
+  },
+  "bugs": {
+    "url": "https://github.com/BrettGillund/Employee-Tracker-Application/issues"
+  },
+  "homepage": "https://github.com/BrettGillund/Employee-Tracker-Application#readme",
+  "description": ""
 }

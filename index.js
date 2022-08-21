@@ -16,6 +16,14 @@
 
 
 const inquirer = require('inquirer');
+const mysql = require('mysql2');
+const connection = mysql.createPool({
+    host: 'localhost',
+    user: 'root',
+    password: '',
+    database: 'employee_db'
+});
+
 
 function startApplication() {
     inquirer.prompt(
@@ -28,30 +36,85 @@ function startApplication() {
     ).then((choice) => {
         switch(choice.start) {
             case 'view all departments':
-                // function()
+                viewAllDepartments();
                 break;
             case 'view all roles':
-                // function()
+                viewAllRoles();
                 break;
             case 'view all employees':
-                // function()
+                viewAllEmployees();
                 break;
             case 'add a department':
-                // function()
+                viewAllDepartments();
                 break;
             case 'add a role':
-                // function()
+                addARole();
                 break;
             case 'add an employee':
-                // function()
+                addAnEmployee();
                 break;
             case 'update an employee role':
-                // function()
+                updateAnEmployeeRole();
                 break;
 
         }
 
     }).catch(err => {console.log(err)});
 }
+
+function viewAllDepartments () {
+    const sql = `
+    SELECT
+        JSON_ARRAYAGG(department.department_name) as DEPS
+        FROM department
+    `;
+    connection.query(sql, (err, data) => {
+        if (err) return console.log(err);
+        console.table(data[0].DEPS);
+        process.exit();
+    })
+}
+function viewAllRoles() {
+    const sql = `
+        SELECT
+            JSON_ARRAYAGG(employee_role.title) as DEPS
+            FROM employee_role
+    `;
+    connection.query(sql, (err, data) => {
+        if (err) return console.log(err);
+        console.table(data[0].DEPS);
+        process.exit();
+    });
+};
+
+function viewAllEmployees() {
+    const sql = `
+        SELECT
+            JSON_ARRAYAGG(JSON_OBJECT('First', employee_info.first_name, 'Last', employee_info.last_name)) as DEPS
+            FROM employee_info
+        `;
+    connection.query(sql, (err, data) => {
+        if (err) return console.log(err);
+        console.table(data[0].DEPS);
+        process.exit();
+});
+};
+
+// viewAllDepartments() {
+
+// };
+
+// addARole() {
+
+// };
+
+// addAnEmployee() {
+
+// };
+
+// updateAnEmployeeRole() {
+
+// };
+
 
 startApplication();
