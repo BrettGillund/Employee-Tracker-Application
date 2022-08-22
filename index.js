@@ -31,7 +31,7 @@ function startApplication() {
             type: 'list',
             name: 'start',
             message: 'Please select an option from the below list.',
-            choices: ['view all departments', 'view all roles', 'view all employees', 'add a department', 'add a role', 'add an employee', 'update an employee role']
+            choices: ['view all departments', 'view all roles', 'view all employees', 'add a department', 'add a role', 'add an employee', 'update an employee role', 'EXIT']
         }
     ).then((choice) => {
         switch(choice.start) {
@@ -45,7 +45,7 @@ function startApplication() {
                 viewAllEmployees();
                 break;
             case 'add a department':
-                viewAllDepartments();
+                addADepartment();
                 break;
             case 'add a role':
                 addARole();
@@ -55,6 +55,8 @@ function startApplication() {
                 break;
             case 'update an employee role':
                 updateAnEmployeeRole();
+                break;
+            case 'EXIT':
                 break;
 
         }
@@ -71,7 +73,7 @@ function viewAllDepartments () {
     connection.query(sql, (err, data) => {
         if (err) return console.log(err);
         console.table(data[0].DEPS);
-        process.exit();
+        startApplication();
     })
 }
 function viewAllRoles() {
@@ -83,7 +85,7 @@ function viewAllRoles() {
     connection.query(sql, (err, data) => {
         if (err) return console.log(err);
         console.table(data[0].DEPS);
-        process.exit();
+        startApplication();
     });
 };
 
@@ -96,23 +98,106 @@ function viewAllEmployees() {
     connection.query(sql, (err, data) => {
         if (err) return console.log(err);
         console.table(data[0].DEPS);
-        process.exit();
+        startApplication();
 });
 };
 
-// viewAllDepartments() {
+function addADepartment() {
+    inquirer.prompt(
+        {
+            type: 'input',
+            name: 'department',
+            message: 'please enter the name of the department you would like to add.'
+        }
+    ).then((data) => {
+        let newDepartment = (data.department)
+        const sql =`INSERT INTO department (department_name) VALUES ('${newDepartment}')`
 
-// };
+        connection.query(sql, (err, data) => {
+            if (err) return console.log(err);
+            console.table("You have successfully added a new department!");
+            startApplication();
+        })
+    });
+}
 
-// addARole() {
 
-// };
+function addARole() {
+    inquirer.prompt([
+        {
+            type: 'input',
+            name: 'role',
+            message: 'please enter the name of the title you would like to add.'
+        },
+        {
+            type: 'list',
+            name: 'department',
+            choices: ['Engineering', 'Finance', 'Marketing', 'Legal', 'Sales']
+        },
+        {
+            type: 'number',
+            name: 'salary',
+            message: 'please enter the salery of the title you would like to add.'
+        }
+    ]).then((data) => {
+        let newRole = (data.role)
+        let newSalary = (data.salary)
+        if(data.department === 'Engineering') {
+            var newDepartment = 1;
+        } else if(data.department === 'Finance'){
+            var newDepartment = 2;
+        } else if(data.department === 'Marketing'){
+            var newDepartment = 3;
+        } else if(data.department === 'Legal'){
+            var newDepartment = 4;
+        } else{
+            var newDepartment = 5;
+        }
 
-// addAnEmployee() {
+        const sql =`INSERT INTO employee_role (title, department_id, salary) VALUES ('${newRole}', ${newDepartment}, ${newSalary})`
 
-// };
+        connection.query(sql, (err, data) => {
+            if (err) return console.log(err);
+            console.table("You have successfully added a new role title!");
+            startApplication();
+        })
+    });
+};
 
-// updateAnEmployeeRole() {
+function  addAnEmployee() {
+    var role = [];
+    inquirer.prompt([
+        {
+            type: 'input',
+            name: 'first',
+            message: 'please enter the first name of the employee would like to add.'
+        },
+        {
+            type: 'input',
+            name: 'last',
+            message: 'please enter the last name of the employee you would like to add.'
+        },
+        {
+            type: 'list',
+            name: 'role',
+            choices: `${role}`
+        }
+    ]).then((data) => {
+        let firstName = (data.first)
+        let lastName = (data.lastName)
+        let role = (data.role)
+
+        const sql =`INSERT INTO employee_info (first_name, last_name, role_id) VALUES ('${firstName}', ${lastName}, ${role})`
+
+        connection.query(sql, (err, data) => {
+            if (err) return console.log(err);
+            console.table("You have successfully added a new employee!");
+            startApplication();
+        })
+    });
+}
+
+//function  updateAnEmployeeRole() {
 
 // };
 
