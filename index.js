@@ -180,7 +180,7 @@ function  addAnEmployee() {
         {
             type: 'list',
             name: 'role',
-            choices: `${role}`
+            choices: ``
         }
     ]).then((data) => {
         let firstName = (data.first)
